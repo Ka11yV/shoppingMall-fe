@@ -1,6 +1,6 @@
 import axios from "axios";
 // 상황따라 주소 다름
-const BACKEND = process.env.REACT_APP_PROD_BACKEND;
+const BACKEND = process.env.REACT_APP_BACKEND_PROXY;
 // const PROD_BACKEND = process.env.REACT_APP_PROD_BACKEND;
 // const BACKEND_PROXY = process.env.REACT_APP_BACKEND_PROXY;
 
