@@ -34,6 +34,10 @@ const Login = () => {
         // 구글로 로그인 하기
     };
 
+    if (user) {
+        navigate("/");
+    }
+
     return (
         <>
             <Container className="login-area">
