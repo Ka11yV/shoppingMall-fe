@@ -3,7 +3,7 @@ import api from "../utils/api";
 import uiStore from "./uiStore";
 import errorStore from "./errorStore";
 
-const userStore = create((set) => ({
+const userStore = create((set, get) => ({
     user: null,
     setUser: (user) => set({ user }),
     registerUser: async ({ name, email, password }, navigate) => {
@@ -30,6 +30,24 @@ const userStore = create((set) => ({
             return response;
         } catch (error) {
             return error;
+        }
+    },
+    loginWithToken: async () => {
+        try {
+            const response = await api.get("/user/me");
+            if (response.status !== 200) throw new Error(response.error);
+            set({ user: response.data.user });
+        } catch (error) {
+            console.error("Login error:", error);
+            return error;
+        }
+    },
+    logoutUser: async () => {
+        try {
+            sessionStorage.removeItem("token");
+            set({ user: null });
+        } catch (error) {
+            console.log(error);
         }
     },
 }));

@@ -7,15 +7,15 @@ import ToastMessage from "../component/ToastMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
 import { commonUiActions } from "../action/commonUiAction";
+import userStore from "../store/userStore";
 
 const AppLayout = ({ children }) => {
     const location = useLocation();
-    const dispatch = useDispatch();
-    const user = null;
+    const { user, loginWithToken } = userStore();
 
     // const { user } = useSelector((state) => state.user);
     useEffect(() => {
-        dispatch(userActions.loginWithToken());
+        loginWithToken();
     }, []);
 
     return (
