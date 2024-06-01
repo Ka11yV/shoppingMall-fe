@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { userActions } from "../action/userAction";
 import userStore from "../store/userStore";
+import errorStore from "../store/errorStore";
 
 import "../style/register.style.css";
 import uiStore from "../store/uiStore";
@@ -17,7 +18,7 @@ const RegisterPage = () => {
         policy: false,
     });
     const navigate = useNavigate();
-    const { error, setError } = userStore();
+    const { error, setError } = errorStore();
     const [passwordError, setPasswordError] = useState("");
     const [policyError, setPolicyError] = useState(false);
     const { registerUser } = userStore();
@@ -27,12 +28,22 @@ const RegisterPage = () => {
         event.preventDefault();
         try {
             if (password !== confirmPassword) {
-                setPasswordError("비밀번호 중복확인이 일치하지않습니다.");
+                throw new Error("비밀번호 중복확인이 일치하지 않습니다.");
             }
-            if (!policy) setPolicyError(true);
-            await registerUser({ name, email, password }, navigate);
-            setPolicyError("");
-            setPasswordError("");
+            if (!policy) {
+                setPolicyError(true);
+                throw new Error("이용약관에 동의 해 주세요");
+            }
+            const response = await registerUser(
+                { name, email, password },
+                navigate
+            );
+            if (response.status !== 200) {
+                throw new Error(response.message);
+            } else {
+                setPolicyError(false);
+                setError("");
+            }
         } catch (error) {
             setError(error.message);
         }

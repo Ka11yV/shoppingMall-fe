@@ -4,31 +4,36 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
 import userStore from "../store/userStore";
+import errorStore from "../store/errorStore";
+import { useEffect } from "react";
 
 import "../style/login.style.css";
 
 const Login = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector((state) => state.user);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const error = useSelector((state) => state.user.error);
+    const { user, loginUser, setUser } = userStore();
+    const { error, setError } = errorStore();
 
     const loginWithEmail = async (event) => {
         event.preventDefault();
-        const { loginWithEmail } = userStore();
-        await loginWithEmail({ email, password });
-        //이메일,패스워드를 가지고 백엔드로 보내기
+        const response = await loginUser({ email, password }, navigate);
+        console.log(response.status);
+        if (response.status === 200) {
+            const token = response.data.token;
+            sessionStorage.setItem("token", token);
+            setUser(response.data.user);
+            setError("");
+        } else {
+            setError(response.message);
+        }
     };
 
     const handleGoogleLogin = async (googleData) => {
         // 구글로 로그인 하기
     };
 
-    if (user) {
-        navigate("/");
-    }
     return (
         <>
             <Container className="login-area">
