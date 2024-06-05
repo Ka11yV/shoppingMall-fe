@@ -38,7 +38,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         setShowDialog(false);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (stock.length === 0) return setStockError(true);
@@ -46,7 +46,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             return { ...total, [item[0]]: parseInt([item[1]]) };
         }, {});
         if (mode === "new") {
-            createProduct({ ...formData, stock: totalStock });
+            await createProduct({ ...formData, stock: totalStock });
             setShowDialog(false);
             getProductList();
         } else {
