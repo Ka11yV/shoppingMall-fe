@@ -31,10 +31,10 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     const [stock, setStock] = useState([]);
     const [stockError, setStockError] = useState(false);
     const { createProduct } = productStore();
+    const { getProductList } = productStore();
 
     const handleClose = () => {
         setStock([]);
-        console.log("asdf");
         setShowDialog(false);
     };
 
@@ -48,6 +48,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         if (mode === "new") {
             createProduct({ ...formData, stock: totalStock });
             setShowDialog(false);
+            getProductList();
         } else {
             // 상품 수정하기
         }
