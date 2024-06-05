@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -18,10 +18,14 @@ const RegisterPage = () => {
         policy: false,
     });
     const navigate = useNavigate();
-    const { error, setError } = errorStore();
+    const { error, setError, clearError } = errorStore();
     const [passwordError, setPasswordError] = useState("");
     const [policyError, setPolicyError] = useState(false);
     const { registerUser } = userStore();
+
+    useEffect(() => {
+        clearError();
+    }, []);
 
     const register = async (event) => {
         const { email, name, password, confirmPassword, policy } = formData;
@@ -55,7 +59,7 @@ const RegisterPage = () => {
     };
 
     const handleChange = (event) => {
-        event.preventDefault();
+        event.target.id !== "policy" && event.preventDefault();
         const { id, value, checked } = event.target;
 
         if (id === "policy") {

@@ -14,7 +14,11 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { user, loginUser, setUser } = userStore();
-    const { error, setError } = errorStore();
+    const { error, setError, clearError } = errorStore();
+
+    useEffect(() => {
+        clearError();
+    }, []);
 
     const loginWithEmail = async (event) => {
         event.preventDefault();
