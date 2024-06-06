@@ -4,6 +4,7 @@ import uiStore from "./uiStore";
 
 const productStore = create((set) => ({
     product: "",
+    totalPageNum: "",
     createProduct: async (formData) => {
         try {
             const response = await api.post("/product", formData);
@@ -14,12 +15,15 @@ const productStore = create((set) => ({
             return error;
         }
     },
-    getProductList: async () => {
+    getProductList: async (query) => {
         try {
-            const response = await api.get("/product");
+            const response = await api.get("/product", {
+                params: { ...query },
+            });
             if (response.status !== 200) throw new Error(response.error);
-            uiStore.getState().showToastMessage("상품 로딩 완료", "success");
+            // uiStore.getState().showToastMessage("상품 로딩 완료", "success");
             set({ product: response.data.data });
+            set({ totalPageNum: response.data.totalPageNum });
         } catch (error) {
             uiStore.getState().showToastMessage(error.message, "error");
             return error;
