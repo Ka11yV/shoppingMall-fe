@@ -1,25 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../component/ProductCard";
 import { Row, Col, Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../action/productAction";
 import { commonUiActions } from "../action/commonUiAction";
+import errorStore from "../store/errorStore";
+import productStore from "../store/productStore";
 
 const ProductAll = () => {
-  const dispatch = useDispatch();
-  const error = useSelector((state) => state.product.error);
-  // 처음 로딩하면 상품리스트 불러오기
+    const { error } = errorStore();
+    const { product, getProductList } = productStore();
+    const products = Array.isArray(product) ? product : [];
+    const [query, setQuery] = useSearchParams();
+    const [searchQuery, setSearchQuery] = useState({
+        name: query.get("name") || "",
+    });
 
-  return (
-    <Container>
-      <Row>
-        <Col md={3} sm={12}>
-          <ProductCard />
-        </Col>
-      </Row>
-    </Container>
-  );
+    useEffect(() => {
+        const name = query.get("name") || "";
+        setSearchQuery({ name });
+    }, [query]);
+
+    // `searchQuery`가 변경될 때 상품 목록을 가져옴
+    useEffect(() => {
+        if (searchQuery.name !== undefined) {
+            getProductList(searchQuery);
+        }
+    }, [searchQuery, getProductList]);
+
+    return (
+        <Container>
+            <Row>
+                {products.map((item, index) => (
+                    <Col key={index} md={3} sm={12}>
+                        <ProductCard
+                            productName={item.name}
+                            imgSrc={item.image}
+                            price={item.price}
+                        />
+                    </Col>
+                ))}
+            </Row>
+        </Container>
+    );
 };
-
 export default ProductAll;

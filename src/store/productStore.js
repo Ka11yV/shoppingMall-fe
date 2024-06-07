@@ -17,6 +17,7 @@ const productStore = create((set) => ({
     },
     getProductList: async (query) => {
         try {
+            console.log(query);
             const response = await api.get("/product", {
                 params: { ...query },
             });
