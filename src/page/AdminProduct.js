@@ -19,7 +19,14 @@ const AdminProduct = () => {
         page: query.get("page") || 1,
         name: query.get("name") || "",
     }); //검색 조건들을 저장하는 객체
-    const { product, getProductList, totalPageNum } = productStore();
+    const {
+        product,
+        selectedProduct,
+        setSelectedProduct,
+        getProductList,
+        totalPageNum,
+        deleteProduct,
+    } = productStore();
 
     const [mode, setMode] = useState("new");
     const tableHeader = [
@@ -47,12 +54,13 @@ const AdminProduct = () => {
     }, [searchQuery]);
 
     const deleteItem = (id) => {
-        //아이템 삭제하가ㅣ
+        deleteProduct(id);
     };
 
     const openEditForm = (product) => {
-        //edit모드로 설정하고
-        // 아이템 수정다이얼로그 열어주기
+        setMode("edit");
+        setSelectedProduct(product);
+        setShowDialog(true);
     };
 
     const handleClickNewItem = () => {

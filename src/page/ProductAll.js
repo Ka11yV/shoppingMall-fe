@@ -6,6 +6,7 @@ import { productActions } from "../action/productAction";
 import { commonUiActions } from "../action/commonUiAction";
 import errorStore from "../store/errorStore";
 import productStore from "../store/productStore";
+import uiStore from "../store/uiStore";
 
 const ProductAll = () => {
     const { error } = errorStore();
@@ -15,6 +16,7 @@ const ProductAll = () => {
     const [searchQuery, setSearchQuery] = useState({
         name: query.get("name") || "",
     });
+    const { showToastMessage } = uiStore();
 
     useEffect(() => {
         const name = query.get("name") || "";
@@ -26,22 +28,30 @@ const ProductAll = () => {
         if (searchQuery.name !== undefined) {
             getProductList(searchQuery);
         }
-    }, [searchQuery, getProductList]);
+    }, [searchQuery]);
 
     return (
-        <Container>
-            <Row>
-                {products.map((item, index) => (
-                    <Col key={index} md={3} sm={12}>
-                        <ProductCard
-                            productName={item.name}
-                            imgSrc={item.image}
-                            price={item.price}
-                        />
-                    </Col>
-                ))}
-            </Row>
-        </Container>
+        <>
+            <Container>
+                <Row>
+                    {products.length === 0 && (
+                        <div>
+                            <h1>검색 결과가 없습니다</h1>
+                        </div>
+                    )}
+                    {products.map((item, index) => (
+                        <Col key={index} md={3} sm={12}>
+                            <ProductCard
+                                id={item._id}
+                                productName={item.name}
+                                imgSrc={item.image}
+                                price={item.price}
+                            />
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
+        </>
     );
 };
 export default ProductAll;
