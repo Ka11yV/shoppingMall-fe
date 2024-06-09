@@ -8,7 +8,11 @@ const ProductCard = ({ id, productName, imgSrc, price }) => {
         navigate(`/product/${id}`);
     };
     return (
-        <div className="card" onClick={() => showProduct(id)}>
+        <div
+            className="card"
+            onClick={() => showProduct(id)}
+            style={{ cursor: "pointer" }}
+        >
             <img src={imgSrc} alt="" />
             <div>{productName}</div>
             <div>₩ {price}</div>

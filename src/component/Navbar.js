@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
 import userStore from "../store/userStore";
+import cartStore from "../store/cartStore";
 
 const Navbar = () => {
     const { user, logoutUser } = userStore();
-    const dispatch = useDispatch();
-    const { cartItemCount } = useSelector((state) => state.cart);
+    const { cartItemQty, getCartItemQty } = cartStore();
     const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
     const [showSearchBox, setShowSearchBox] = useState(false);
     const menuList = [
@@ -42,6 +42,13 @@ const Navbar = () => {
     const logout = () => {
         logoutUser();
     };
+
+    useEffect(() => {
+        if (user) {
+            getCartItemQty({ user });
+        }
+    }, [user]);
+
     return (
         <div>
             {showSearchBox && (
@@ -122,7 +129,7 @@ const Navbar = () => {
                             <FontAwesomeIcon icon={faShoppingBag} />
                             {!isMobile && (
                                 <span style={{ cursor: "pointer" }}>{`쇼핑백(${
-                                    cartItemCount || 0
+                                    cartItemQty || 0
                                 })`}</span>
                             )}
                         </div>

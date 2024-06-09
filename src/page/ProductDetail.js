@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Dropdown } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { productActions } from "../action/productAction";
 import { ColorRing } from "react-loader-spinner";
-import { cartActions } from "../action/cartAction";
-import { commonUiActions } from "../action/commonUiAction";
-import { currencyFormat } from "../utils/number";
-import "../style/productDetail.style.css";
 import productStore from "../store/productStore";
+import "../style/productDetail.style.css";
+import userStore from "../store/userStore";
+import cartStore from "../store/cartStore";
 
 const ProductDetail = () => {
     const { getProductDetail, loading } = productStore();
@@ -16,19 +13,26 @@ const ProductDetail = () => {
     const { id } = useParams();
     const [sizeError, setSizeError] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState();
+    const { user } = userStore();
+    const { addToCart } = cartStore();
 
     const navigate = useNavigate();
 
     const addItemToCart = () => {
-        //사이즈를 아직 선택안했다면 에러
-        // 아직 로그인을 안한유저라면 로그인페이지로
-        // 카트에 아이템 추가하기
+        if (!size) {
+            setSizeError(true);
+            return;
+        }
+        if (!user) navigate("/login");
+        console.log(id, size);
+        addToCart({ id, size });
+        // 카트에 아이템 추가하기 로직 추가
     };
-    const selectSize = (value) => {};
 
-    //카트에러가 있으면 에러메세지 보여주기
-
-    //에러가 있으면 에러메세지 보여주기
+    const selectSize = (value) => {
+        setSize(value);
+        setSizeError(false);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,17 +40,17 @@ const ProductDetail = () => {
                 const response = await getProductDetail(id);
                 setSelectedProduct(response.data);
             } catch (error) {
-                return console.log(error);
+                console.log(error);
             }
         };
         fetchData();
     }, [id]);
 
-    useEffect(() => {
-        console.log(selectedProduct);
-    }, [selectedProduct]);
+    // useEffect(() => {
+    //     console.log(selectedProduct);
+    // }, [selectedProduct]);
 
-    if (loading || !selectedProduct)
+    if (loading || !selectedProduct) {
         return (
             <ColorRing
                 visible={true}
@@ -58,6 +62,7 @@ const ProductDetail = () => {
                 colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
         );
+    }
 
     return (
         <Container className="product-detail-card">
@@ -71,19 +76,17 @@ const ProductDetail = () => {
                 </Col>
                 <Col className="product-info-area" sm={6}>
                     <div className="product-info">{selectedProduct.name}</div>
-                    <br></br>
+                    <br />
                     <div className="product-info">
                         ₩ {selectedProduct.price}
                     </div>
-                    <br></br>
+                    <br />
                     <div className="product-info">
                         {selectedProduct.description}
                     </div>
 
                     <Dropdown
                         className="drop-down size-drop-down"
-                        title={size}
-                        align="start"
                         onSelect={(value) => selectSize(value)}
                     >
                         <Dropdown.Toggle
@@ -101,7 +104,10 @@ const ProductDetail = () => {
                             {Object.keys(selectedProduct.stock).length > 0 &&
                                 Object.keys(selectedProduct.stock).map(
                                     (item) => (
-                                        <Dropdown.Item>
+                                        <Dropdown.Item
+                                            key={item}
+                                            eventKey={item}
+                                        >
                                             {item.toUpperCase()}
                                         </Dropdown.Item>
                                     )
