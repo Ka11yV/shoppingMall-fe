@@ -52,7 +52,11 @@ const cartStore = create((set) => ({
     },
     deleteCartItem: async (id) => {
         try {
-            const response = await api.delete("/cart", { id: id });
+            const response = await api.delete("/cart", {
+                data: {
+                    id: id,
+                },
+            });
             if (response.status !== 200) throw new Error(response.error);
             console.log(response);
         } catch (error) {

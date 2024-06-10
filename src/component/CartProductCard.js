@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +8,7 @@ import { currencyFormat } from "../utils/number";
 import cartStore from "../store/cartStore";
 
 const CartProductCard = ({ item }) => {
-    const { deleteCartItem } = cartStore();
+    const { getCartItem, deleteCartItem } = cartStore();
     const handleQtyChange = () => {
         //아이템 수량을 수정한다
     };
@@ -16,10 +16,6 @@ const CartProductCard = ({ item }) => {
     const deleteCart = (id) => {
         deleteCartItem(id);
     };
-
-    // useEffect(() => {
-
-    // }, [])
 
     return (
         <div className="product-card-cart">
@@ -35,7 +31,7 @@ const CartProductCard = ({ item }) => {
                                 icon={faTrash}
                                 width={24}
                                 onClick={() => {
-                                    deleteCart(item.productId._id);
+                                    deleteCart(item._id);
                                 }}
                                 style={{ cursor: "pointer" }}
                             />
