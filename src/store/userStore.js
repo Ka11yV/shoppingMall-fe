@@ -38,7 +38,7 @@ const userStore = create((set, get) => ({
             if (response.status !== 200) throw new Error(response.error);
             set({ user: response.data.user });
         } catch (error) {
-            console.error("Login error:", error);
+            console.log("Login error:", error);
             return error;
         }
     },

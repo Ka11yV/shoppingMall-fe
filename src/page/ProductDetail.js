@@ -24,7 +24,6 @@ const ProductDetail = () => {
             return;
         }
         if (!user) navigate("/login");
-        console.log(id, size);
         addToCart({ id, size });
         // 카트에 아이템 추가하기 로직 추가
     };

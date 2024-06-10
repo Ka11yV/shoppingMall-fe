@@ -20,7 +20,7 @@ const cartStore = create((set) => ({
             set({ cartItemQty: response.data.cartItemQty });
             return response;
         } catch (error) {
-            return error;
+            uiStore.getState().showToastMessage(error.message, 'error')
         }
     },
     getCartItems: async () => {
@@ -58,11 +58,20 @@ const cartStore = create((set) => ({
                 },
             });
             if (response.status !== 200) throw new Error(response.error);
-            console.log(response);
+            uiStore.getState().showToastMessage('상품을 삭제했습니다', 'success')
         } catch (error) {
             return error;
         }
     },
+    setItemQty: async(id, qty) => {
+        try {
+            console.log(id, qty)
+            const response = await api.post('/cart/setItemQty', {id, qty})
+            console.log(response)
+        } catch(error) {
+            return error;
+        }
+    }
 }));
 
 export default cartStore;

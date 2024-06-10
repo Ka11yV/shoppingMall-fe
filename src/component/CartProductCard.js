@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,16 +6,33 @@ import { useDispatch } from "react-redux";
 import { cartActions } from "../action/cartAction";
 import { currencyFormat } from "../utils/number";
 import cartStore from "../store/cartStore";
+import userStore from '../store/userStore'
 
 const CartProductCard = ({ item }) => {
-    const { getCartItem, deleteCartItem } = cartStore();
-    const handleQtyChange = () => {
-        //아이템 수량을 수정한다
+    const { getCartItems, deleteCartItem, getCartItemQty, setItemQty } = cartStore();
+    const [total, setTotal] = useState();
+    const {user} = userStore();
+    const [price, setPrice] = useState(item.productId.price)
+    const [qty, setQty] = useState(item.qty)
+    const {totalPrice } = cartStore();
+
+
+    const handleQtyChange = async (event, id) => {
+        const qty = event.target.value;
+        setQty(qty)
+        await setItemQty(id, qty)
+        getCartItems();
     };
 
-    const deleteCart = (id) => {
-        deleteCartItem(id);
+    const deleteCart = async (id) => {
+        await deleteCartItem(id);
+        getCartItems();
+        getCartItemQty({user})
     };
+
+    useEffect(() => {
+        setTotal(price * qty)
+    }, [qty])
 
     return (
         <div className="product-card-cart">
@@ -39,16 +56,16 @@ const CartProductCard = ({ item }) => {
                     </div>
 
                     <div>
-                        <strong>₩ {item.productId.price}</strong>
+                        <strong>₩ {currencyFormat(item.productId.price)}</strong>
                     </div>
                     <div>Size: {item.size.toUpperCase()}</div>
-                    <div>Total: ₩ 45,000</div>
+                    <div>Total: ₩ {currencyFormat(total)}</div>
                     <div>
                         Quantity:
                         <Form.Select
-                            onChange={(event) => handleQtyChange()}
+                            onChange={(event) => handleQtyChange(event, item._id)}
                             required
-                            defaultValue={1}
+                            defaultValue={item.qty || 1}
                             className="qty-dropdown"
                         >
                             <option value={1}>1</option>

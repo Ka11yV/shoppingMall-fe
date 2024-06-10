@@ -10,6 +10,7 @@ import cartStore from "../store/cartStore";
 
 const CartPage = () => {
     const { cart, getCartItems, totalPrice } = cartStore();
+    const [itemTotalPrice, setItemTotalPrice] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,8 +20,8 @@ const CartPage = () => {
     }, []);
 
     useEffect(() => {
-        console.log(cart);
-    }, [cart]);
+        console.log(itemTotalPrice)
+    }, [itemTotalPrice])
 
     return (
         <Container>
@@ -38,7 +39,7 @@ const CartPage = () => {
                     )}
                 </Col>
                 <Col xs={12} md={5}>
-                    <OrderReceipt cart={cart} totalPrice={totalPrice} />
+                    <OrderReceipt cart={cart}/>
                 </Col>
             </Row>
         </Container>
