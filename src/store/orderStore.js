@@ -11,6 +11,7 @@ const orderStore = create((set, get) => ({
             
             uiStore.getState().showToastMessage('주문이 완료되었습니다', 'success')
             set({orderNum: response.data.orderNum.toString()})
+            return response
         } catch (error) {
             uiStore.getState().showToastMessage(error.message, 'error');
             return error;

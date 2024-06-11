@@ -52,6 +52,7 @@ const PaymentPage = () => {
       })
     }
     const response = await createOrder(data)
+    console.log('response', response)
     if(response.status === 200) navigate('/payment/success')
     //오더 생성하가ㅣ
   };
