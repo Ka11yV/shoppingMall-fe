@@ -5,9 +5,10 @@ import { useLocation } from "react-router-dom";
 import { currencyFormat } from "../utils/number";
 import cartStore from "../store/cartStore";
 
-const OrderReceipt = ({ cart, totalPrice }) => {
+const OrderReceipt = ({ cart }) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const {totalPrice} = cartStore();
 
     return (
         <div className="receipt-container">
