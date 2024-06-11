@@ -35,7 +35,7 @@ const PaymentPage = () => {
   console.log(shipInfo)
   //맨처음 페이지 로딩할때는 넘어가고  오더번호를 받으면 성공페이지로 넘어가기
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const {firstName, lastName, contact, address, city, zip} = shipInfo;
     const data = {
@@ -51,7 +51,8 @@ const PaymentPage = () => {
         }
       })
     }
-    createOrder(data)
+    const response = await createOrder(data)
+    if(response.status === 200) navigate('/payment/success')
     //오더 생성하가ㅣ
   };
 

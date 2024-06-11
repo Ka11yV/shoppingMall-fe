@@ -1,11 +1,18 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../style/paymentPage.style.css";
+import orderStore from "../store/orderStore";
 
 const OrderCompletePage = () => {
   //만약 주문번호가 없는상태로 이페이지에 왔다면 다시 메인페이지로 돌아가기
+  const {orderNum} = orderStore()
+  const navigate = useNavigate();
+
+  if(!orderNum) {
+    navigate('/')
+  }
   return (
     <Container className="confirmation-page">
       <img
@@ -15,7 +22,7 @@ const OrderCompletePage = () => {
         alt="greenCheck.png"
       />
       <h2>예약이 완료됬습니다!</h2>
-      <div>예약번호:"hard_code"</div>
+      <div>예약번호:{orderNum}</div>
       <div>
         예약 확인은 내 예약 메뉴에서 확인해주세요
         <div className="text-align-center">
