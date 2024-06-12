@@ -22,7 +22,7 @@ const CartPage = () => {
         <Container>
             <Row>
                 <Col xs={12} md={7}>
-                    {cart.length < 0 ? (
+                    {cart.length <= 0 ? (
                         <div className="text-align-center empty-bag">
                             <h2>카트가 비어있습니다.</h2>
                             <div>상품을 담아주세요!</div>
@@ -34,7 +34,7 @@ const CartPage = () => {
                     )}
                 </Col>
                 <Col xs={12} md={5}>
-                    <OrderReceipt cart={cart}/>
+                    <OrderReceipt cart={cart} />
                 </Col>
             </Row>
         </Container>

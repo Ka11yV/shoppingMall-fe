@@ -9,12 +9,12 @@ import * as types from "../constants/order.constants";
 import ReactPaginate from "react-paginate";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { commonUiActions } from "../action/commonUiAction";
+import orderStore from "../store/orderStore";
 
 const AdminOrderPage = () => {
     const navigate = useNavigate();
     const [query, setQuery] = useSearchParams();
-    const dispatch = useDispatch();
-    const orderList = useSelector((state) => state.order.orderList);
+    const { orderList, getOrder, setSelectedOrder } = orderStore();
     const [searchQuery, setSearchQuery] = useState({
         page: query.get("page") || 1,
         ordernum: query.get("ordernum") || "",
@@ -33,8 +33,15 @@ const AdminOrderPage = () => {
     ];
 
     useEffect(() => {
-        dispatch(orderActions.getOrderList({ ...searchQuery }));
+        const orderNum = query.get("ordernum") || "";
+        const page = query.get("page") || 1;
     }, [query]);
+
+    useEffect(() => {
+        if (searchQuery.ordernum !== undefined) {
+            getOrder({ ...searchQuery });
+        }
+    }, [searchQuery]);
 
     useEffect(() => {
         if (searchQuery.ordernum === "") {
@@ -48,7 +55,7 @@ const AdminOrderPage = () => {
 
     const openEditForm = (order) => {
         setOpen(true);
-        dispatch({ type: types.SET_SELECTED_ORDER, payload: order });
+        setSelectedOrder(order);
     };
 
     const handlePageClick = ({ selected }) => {
