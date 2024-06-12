@@ -14,13 +14,13 @@ import orderStore from "../store/orderStore";
 const AdminOrderPage = () => {
     const navigate = useNavigate();
     const [query, setQuery] = useSearchParams();
-    const { orderList, getOrder, setSelectedOrder } = orderStore();
+    const { orderList, getOrder, setSelectedOrder, totalPageNum } =
+        orderStore();
     const [searchQuery, setSearchQuery] = useState({
         page: query.get("page") || 1,
-        ordernum: query.get("ordernum") || "",
+        orderNum: query.get("orderNum") || "",
     });
     const [open, setOpen] = useState(false);
-    const totalPageNum = useSelector((state) => state.order.totalPageNum);
     const tableHeader = [
         "#",
         "Order#",
@@ -33,19 +33,18 @@ const AdminOrderPage = () => {
     ];
 
     useEffect(() => {
-        const orderNum = query.get("ordernum") || "";
-        const page = query.get("page") || 1;
+        const orderNum = query.get("orderNum") || "";
+        const page = parseInt(query.get("page")) || 1;
+        setSearchQuery({ orderNum, page });
     }, [query]);
 
     useEffect(() => {
-        if (searchQuery.ordernum !== undefined) {
-            getOrder({ ...searchQuery });
-        }
+        getOrder({ ...searchQuery });
     }, [searchQuery]);
 
     useEffect(() => {
-        if (searchQuery.ordernum === "") {
-            delete searchQuery.ordernum;
+        if (searchQuery.orderNum === "") {
+            delete searchQuery.orderNum;
         }
         const params = new URLSearchParams(searchQuery);
         const queryString = params.toString();
@@ -74,7 +73,7 @@ const AdminOrderPage = () => {
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         placeholder="오더번호"
-                        field="ordernum"
+                        field="orderNum"
                     />
                 </div>
 

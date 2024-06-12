@@ -7,6 +7,7 @@ const orderStore = create((set, get) => ({
     orderList: [],
     orderNum: "",
     selectedOrder: [],
+    totalPageNum: 0,
     setSelectedOrder: (order) => {
         set({ selectedOrder: order });
     },
@@ -25,14 +26,15 @@ const orderStore = create((set, get) => ({
             return error;
         }
     },
-    getOrder: async ({ page = 1, ordernum }) => {
+    getOrder: async ({ page = 1, orderNum }) => {
         try {
             const response = await api.get("/order", {
-                params: { page, ordernum },
+                params: { page, orderNum },
             });
+
             if (response.status !== 200) throw new Error(response.error);
             const orders = response.data.data || [];
-            set({ orderList: orders });
+            set({ orderList: orders, totalPageNum: response.totalPageNum });
             return response;
         } catch (error) {
             uiStore.getState().showToastMessage(error.message, "error");
