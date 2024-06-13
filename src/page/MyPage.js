@@ -11,8 +11,8 @@ import userStore from "../store/userStore";
 import { useNavigate } from "react-router";
 
 const MyPage = () => {
-    const { getOrder } = orderStore();
-    const [orders, setOrder] = useState([]);
+    const { getMyOrder } = orderStore();
+    const [orders, setOrders] = useState([]);
     const { user } = userStore();
     const navigate = useNavigate();
 
@@ -22,13 +22,15 @@ const MyPage = () => {
             return;
         }
         const fetchData = async () => {
-            const response = await getOrder();
-            setOrder(response.data.data);
+            const response = await getMyOrder();
+            setOrders(response);
         };
         fetchData();
-    }, []);
+    }, [user, navigate, getMyOrder]);
 
-    if (!orders) {
+    console.log(orders.length);
+
+    if (orders.length === 0 || orders.length === undefined) {
         return (
             <Container className="no-order-box">
                 <div>주문한 상품이 없습니다</div>

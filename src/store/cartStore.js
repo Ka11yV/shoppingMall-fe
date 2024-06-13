@@ -23,7 +23,7 @@ const cartStore = create((set) => ({
             set({ cartItemQty: response.data.cartItemQty });
             return response;
         } catch (error) {
-            uiStore.getState().showToastMessage(error.message, "error");
+            return error;
         }
     },
     getCartItems: async () => {

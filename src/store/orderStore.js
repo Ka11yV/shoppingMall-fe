@@ -54,6 +54,15 @@ const orderStore = create((set, get) => ({
             return error;
         }
     },
+    getMyOrder: async () => {
+        try {
+            const response = await api.get("/order/getMyOrder");
+            const orders = response.data.orders || [];
+            return orders;
+        } catch (error) {
+            return error;
+        }
+    },
 }));
 
 export default orderStore;

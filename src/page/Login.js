@@ -6,6 +6,7 @@ import { userActions } from "../action/userAction";
 import userStore from "../store/userStore";
 import errorStore from "../store/errorStore";
 import { useEffect } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 
 import "../style/login.style.css";
 
@@ -13,7 +14,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { user, loginUser, setUser } = userStore();
+    const { user, loginUser, setUser, loginWithGoogle } = userStore();
     const { error, setError, clearError } = errorStore();
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const Login = () => {
     };
 
     const handleGoogleLogin = async (googleData) => {
-        // 구글로 로그인 하기
+        const response = loginWithGoogle(googleData.credential);
     };
 
     if (user) {
@@ -84,7 +85,17 @@ const Login = () => {
 
                     <div className="text-align-center mt-2">
                         <p>-외부 계정으로 로그인하기-</p>
-                        <div className="display-center"></div>
+                        <div className="display-center">
+                            <GoogleLogin
+                                onSuccess={(credentialResponse) => {
+                                    handleGoogleLogin(credentialResponse);
+                                }}
+                                onError={() => {
+                                    console.log("Login Failed");
+                                }}
+                            />
+                            ;
+                        </div>
                     </div>
                 </Form>
             </Container>

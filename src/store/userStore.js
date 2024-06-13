@@ -50,6 +50,19 @@ const userStore = create((set, get) => ({
             console.log(error);
         }
     },
+    loginWithGoogle: async (token) => {
+        try {
+            const response = await api.post("/auth/google", { token });
+            console.log(response.data.token);
+            sessionStorage.setItem("token", response.data.token);
+            set({ user: response.data.user });
+            if (response.status !== 200) throw new Error(response.error);
+            return response.data;
+        } catch (error) {
+            uiStore.getState().showToastMessage(error.error, "error");
+            console.log(error);
+        }
+    },
 }));
 
 export default userStore;
