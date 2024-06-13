@@ -7,15 +7,23 @@ import OrderStatusCard from "../component/OrderStatusCard";
 import "../style/orderStatus.style.css";
 import orderStore from "../store/orderStore";
 import { useState } from "react";
+import userStore from "../store/userStore";
+import { useNavigate } from "react-router";
 
 const MyPage = () => {
     const { getOrder } = orderStore();
     const [orders, setOrder] = useState([]);
+    const { user } = userStore();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
         const fetchData = async () => {
             const response = await getOrder();
-            setOrder(response.data.orders);
+            setOrder(response.data.data);
         };
         fetchData();
     }, []);

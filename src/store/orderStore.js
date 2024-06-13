@@ -32,6 +32,8 @@ const orderStore = create((set, get) => ({
                 params: { ...query },
             });
 
+            console.log(response.data.data);
+
             if (response.status !== 200) throw new Error(response.error);
             const orders = response.data.data || [];
             set({
@@ -40,7 +42,7 @@ const orderStore = create((set, get) => ({
             });
             return response;
         } catch (error) {
-            uiStore.getState().showToastMessage(error.message, "error");
+            // uiStore.getState().showToastMessage(error.message, "error");
             return error;
         }
     },

@@ -5,6 +5,18 @@ import { currencyFormat } from "../utils/number";
 import { formatDataTime } from "../utils/string";
 
 const OrderStatusCard = ({ order }) => {
+    const statusColor = (status) => {
+        if (status === "preparing") {
+            return "";
+        } else if (status === "shipping") {
+            return "warning";
+        } else if (status === "delivered") {
+            return "success";
+        } else if (status === "refund") {
+            return "error";
+        }
+    };
+
     formatDataTime(order.createdAt);
 
     const items = order.items;
@@ -41,7 +53,7 @@ const OrderStatusCard = ({ order }) => {
                 </Col>
                 <Col md={2} className="vertical-middle">
                     <div className="text-align-center text-12">주문상태</div>
-                    <Badge bg="warning">{order.status}</Badge>
+                    <Badge bg={badgeBg[order.status]}>{order.status}</Badge>
                 </Col>
             </Row>
         </div>

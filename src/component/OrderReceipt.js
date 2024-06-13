@@ -8,7 +8,7 @@ import cartStore from "../store/cartStore";
 const OrderReceipt = ({ cart }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const {totalPrice} = cartStore();
+    const { totalPrice } = cartStore();
 
     return (
         <div className="receipt-container">
@@ -19,14 +19,19 @@ const OrderReceipt = ({ cart }) => {
                         <div className="display-flex space-between">
                             <div>{item.productId.name}</div>
 
-                            <div>₩ {currencyFormat(item.productId.price * item.qty)}</div>
+                            <div>
+                                ₩{" "}
+                                {currencyFormat(
+                                    item.productId.price * item.qty
+                                )}
+                            </div>
                         </div>
                     </li>
                 ))}
             </ul>
             <div className="display-flex space-between receipt-title">
                 <div>
-                    <strong>Total:</strong>
+                    <strong>Total: {totalPrice}</strong>
                 </div>
                 <div>
                     <strong>₩ {currencyFormat(totalPrice)}</strong>
