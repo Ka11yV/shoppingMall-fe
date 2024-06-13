@@ -20,14 +20,18 @@ const MyPage = () => {
         fetchData();
     }, []);
 
+    if (!orders) {
+        return (
+            <Container className="no-order-box">
+                <div>주문한 상품이 없습니다</div>
+            </Container>
+        );
+    }
     // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
     return (
         <Container className="status-card-container">
-            {orders.length > 0 ? (
-                orders.map((order) => <OrderStatusCard order={order} />)
-            ) : (
-                <h1>주문한 상품이 없습니다</h1>
-            )}
+            {orders.length > 0 &&
+                orders.map((order) => <OrderStatusCard order={order} />)}
         </Container>
     );
 };
