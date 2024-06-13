@@ -33,14 +33,8 @@ const AdminOrderPage = () => {
     ];
 
     useEffect(() => {
-        const orderNum = query.get("orderNum") || "";
-        const page = parseInt(query.get("page")) || 1;
-        setSearchQuery({ orderNum, page });
-    }, [query]);
-
-    useEffect(() => {
         getOrder({ ...searchQuery });
-    }, [searchQuery]);
+    }, [query]);
 
     useEffect(() => {
         if (searchQuery.orderNum === "") {

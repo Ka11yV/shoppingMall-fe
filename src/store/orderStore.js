@@ -26,15 +26,18 @@ const orderStore = create((set, get) => ({
             return error;
         }
     },
-    getOrder: async ({ page = 1, orderNum }) => {
+    getOrder: async (query) => {
         try {
             const response = await api.get("/order", {
-                params: { page, orderNum },
+                params: { ...query },
             });
 
             if (response.status !== 200) throw new Error(response.error);
             const orders = response.data.data || [];
-            set({ orderList: orders, totalPageNum: response.totalPageNum });
+            set({
+                orderList: orders,
+                totalPageNum: response.data.totalPageNum,
+            });
             return response;
         } catch (error) {
             uiStore.getState().showToastMessage(error.message, "error");
