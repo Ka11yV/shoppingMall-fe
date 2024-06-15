@@ -1,33 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Badge } from "react-bootstrap";
 import { badgeBg } from "../constants/order.constants";
 import { currencyFormat } from "../utils/number";
 import { formatDataTime } from "../utils/string";
+import {Button} from '@mui/material'
+import reviewStore from "../store/reviewStore";
 
-const OrderStatusCard = ({ order }) => {
-    const statusColor = (status) => {
-        if (status === "preparing") {
-            return "";
-        } else if (status === "shipping") {
-            return "warning";
-        } else if (status === "delivered") {
-            return "success";
-        } else if (status === "refund") {
-            return "error";
-        }
-    };
+
+const OrderStatusCard = ({ order, setOpen}) => {
 
     formatDataTime(order.createdAt);
+
+    const {setReviewProductId, setReviewOrderNum} = reviewStore();
+    const [isReviewButtonDisabled, setIsReviewButtonDisabled] = useState(order.isWriteReview);
 
     const items = order.items;
 
     const productNameFormmating = (items) => {
         if (items.length > 1) {
-            return `${items[0].productId.name} 외 1개`;
+            return `${items[0].productId.name} 외 ${items.length - 1}개`;
         } else {
             return items[0].productId.name;
         }
     };
+
+    const handleClick = () => {
+        setReviewProductId(items[0].productId._id)
+        setReviewOrderNum(order.orderNum)
+        setOpen(true)
+    }
 
     return (
         <div>
@@ -54,6 +55,7 @@ const OrderStatusCard = ({ order }) => {
                 <Col md={2} className="vertical-middle">
                     <div className="text-align-center text-12">주문상태</div>
                     <Badge bg={badgeBg[order.status]}>{order.status}</Badge>
+                    {order.status === 'delivered' && !order.isWriteReview ? <Button onClick={handleClick}>리뷰 쓰기</Button> : <Button disabled>리뷰 쓰기</Button>}
                 </Col>
             </Row>
         </div>

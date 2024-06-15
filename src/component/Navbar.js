@@ -9,8 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../action/userAction";
 import userStore from "../store/userStore";
 import cartStore from "../store/cartStore";
 
@@ -19,16 +17,16 @@ const Navbar = () => {
     const { cartItemQty, getCartItemQty } = cartStore();
     const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
     const [showSearchBox, setShowSearchBox] = useState(false);
-    const menuList = [
-        "여성",
-        "Divided",
-        "남성",
-        "신생아/유아",
-        "아동",
-        "H&M HOME",
-        "Sale",
-        "지속가능성",
-    ];
+    // const menuList = [
+    //     "여성",
+    //     "Divided",
+    //     "남성",
+    //     "신생아/유아",
+    //     "아동",
+    //     "H&M HOME",
+    //     "Sale",
+    //     "지속가능성",
+    // ];
     let [width, setWidth] = useState(0);
     let navigate = useNavigate();
     const onCheckEnter = (event) => {
@@ -79,11 +77,11 @@ const Navbar = () => {
                     &times;
                 </button>
 
-                <div className="side-menu-list" id="menu-list">
+                {/* <div className="side-menu-list" id="menu-list">
                     {menuList.map((menu, index) => (
                         <button key={index}>{menu}</button>
                     ))}
-                </div>
+                </div> */}
             </div>
             {user && user.level === "admin" && (
                 <Link to="/admin/product?page=1" className="link-area">
@@ -159,19 +157,19 @@ const Navbar = () => {
             <div className="nav-logo">
                 <Link to="/">
                     <img
-                        width={100}
-                        src="/image/hm-logo.png"
+                        width={150}
+                        src="/image/geek.png"
                         alt="hm-logo.png"
                     />
                 </Link>
             </div>
             <div className="nav-menu-area">
                 <ul className="menu">
-                    {menuList.map((menu, index) => (
+                    {/* {menuList.map((menu, index) => (
                         <li key={index}>
                             <a href="#">{menu}</a>
                         </li>
-                    ))}
+                    ))} */}
                 </ul>
                 {!isMobile && ( // admin페이지에서 같은 search-box스타일을 쓰고있음 그래서 여기서 서치박스 안보이는것 처리를 해줌
                     <div className="search-box landing-search-box ">

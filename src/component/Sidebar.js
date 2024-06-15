@@ -17,8 +17,8 @@ const Sidebar = () => {
                 <Link to="/">
                     <img
                         width={100}
-                        src="/image/hm-logo.png"
-                        alt="hm-logo.png"
+                        src="/image/geek.png"
+                        alt="geek-logo.png"
                     />
                 </Link>
                 <div className="sidebar-item">Admin Account</div>

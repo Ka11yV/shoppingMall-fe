@@ -9,26 +9,34 @@ import orderStore from "../store/orderStore";
 import { useState } from "react";
 import userStore from "../store/userStore";
 import { useNavigate } from "react-router";
+import NewReviewDialog from '../component/NewReviewDialog'
 
 const MyPage = () => {
     const { getMyOrder } = orderStore();
     const [orders, setOrders] = useState([]);
     const { user } = userStore();
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false)
+
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const fetchData = async () => {
+        const response = await getMyOrder();
+        await setOrders(response);
+    };
+
 
     useEffect(() => {
         if (!user) {
             navigate("/login");
             return;
         }
-        const fetchData = async () => {
-            const response = await getMyOrder();
-            setOrders(response);
-        };
+
         fetchData();
     }, [user, navigate, getMyOrder]);
-
-    console.log(orders.length);
 
     if (orders.length === 0 || orders.length === undefined) {
         return (
@@ -39,10 +47,15 @@ const MyPage = () => {
     }
     // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
     return (
+        <>
         <Container className="status-card-container">
             {orders.length > 0 &&
-                orders.map((order) => <OrderStatusCard order={order} />)}
+                orders.map((order, index) => <OrderStatusCard order={order} setOpen={setOpen} handleClose={handleClose}/>)}
         </Container>
+
+        {open && (
+            <NewReviewDialog open={open} handleClose={handleClose}/>
+        )}</>
     );
 };
 

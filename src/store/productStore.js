@@ -81,6 +81,7 @@ const productStore = create((set, get) => ({
             return error;
         }
     },
+
 }));
 
 export default productStore;

@@ -16,7 +16,6 @@ const ProductAll = () => {
     const [searchQuery, setSearchQuery] = useState({
         name: query.get("name") || "",
     });
-    const { showToastMessage } = uiStore();
 
     useEffect(() => {
         const name = query.get("name") || "";
